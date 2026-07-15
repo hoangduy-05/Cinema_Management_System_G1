@@ -1,0 +1,30 @@
+.login-wrap {
+  max-width: 1000px; margin: 40px auto; padding: 0 20px;
+  display: grid; grid-template-columns: 1fr 1fr; gap: 40px;
+}
+.login-card { border: 1px solid #eee; border-radius: 4px; overflow: hidden; background: #fff; }
+.login-tabs { display: flex; }
+.login-tabs button {
+  flex: 1; padding: 16px; border: none; background: #e4022b; color: #fff;
+  font-weight: 800; font-size: 15px; opacity: .55;
+}
+.login-tabs button.on { opacity: 1; background: #e4022b; }
+.login-body { padding: 28px 30px 36px; }
+.login-body label { display: block; font-weight: 700; font-size: 14px; margin: 14px 0 6px; }
+.login-body input { width: 100%; padding: 12px; border: 1px solid #ccc; border-radius: 3px; font-size: 14px; }
+.login-submit {
+  width: 100%; margin-top: 22px; padding: 14px; border: none; border-radius: 3px;
+  background: #e4022b; color: #fff; font-weight: 800; letter-spacing: .5px; font-size: 15px;
+}
+.login-forgot { text-align: center; margin-top: 14px; color: #3a6ea5; font-size: 14px; cursor: pointer; }
+.login-err { background: #fdecea; color: #8b1a1a; padding: 10px 12px; border-radius: 4px; font-size: 14px; }
+
+.login-promo { display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; padding: 30px; }
+.promo-illus { font-size: 90px; margin-bottom: 20px; }
+.login-promo h3 { font-size: 22px; letter-spacing: 1px; color: #333; margin: 0 0 10px; }
+.login-promo p { color: #666; line-height: 1.6; }
+.promo-dots { display: flex; gap: 8px; margin-top: 20px; }
+.promo-dots span { width: 10px; height: 10px; border-radius: 50%; background: #ccc; }
+.promo-dots span.on { background: #e4022b; }
+
+@media (max-width: 760px) { .login-wrap { grid-template-columns: 1fr; } .login-promo { display: none; } }

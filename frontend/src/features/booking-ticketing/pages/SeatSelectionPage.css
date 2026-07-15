@@ -1,0 +1,33 @@
+.booking-page { background: #f4efe0; min-height: 100vh; padding: 24px 12px; }
+.booking-frame { max-width: 1080px; margin: 0 auto; background: #fbf7ec; border: 1px solid #d8d1bd; }
+.booking-title {
+  background: #1c1c1c; color: #fff; text-align: center; font-weight: 700;
+  letter-spacing: 1px; padding: 12px; font-size: 18px;
+}
+.booking-sub { background: #f7f1df; padding: 12px 18px; font-size: 14px; line-height: 1.5; }
+.booking-bar { background: #b3b3b3; color: #222; text-align: center; font-weight: 700; padding: 8px; }
+
+/* film strip footer */
+.film-strip {
+  display: flex; align-items: stretch; background: #111; color: #eee;
+  border-top: 6px dotted #333; border-bottom: 6px dotted #333;
+}
+.nav-btn {
+  background: #2a2a2a; color: #fff; border: none; width: 120px;
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+  gap: 4px; font-size: 13px; letter-spacing: 1px;
+}
+.nav-btn span { font-size: 24px; }
+.nav-btn.next { background: #c62828; }
+.film-info { flex: 1; display: flex; gap: 24px; padding: 14px 20px; font-size: 13px; }
+.film-col { display: flex; flex-direction: column; gap: 2px; min-width: 150px; }
+.film-col b { color: #fff; }
+.film-title { font-weight: 700; margin-bottom: 4px; }
+.film-name { max-width: 160px; }
+.muted { color: #9a9a9a; }
+.selected-line { padding: 12px 18px; font-size: 14px; color: #444; }
+
+.center-msg { padding: 48px; text-align: center; color: #666; }
+.nav-btn:disabled { opacity: .6; cursor: wait; }
+
+.film-poster { width: 54px; height: 78px; object-fit: cover; border-radius: 3px; flex-shrink: 0; }

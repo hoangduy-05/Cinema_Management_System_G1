@@ -1,0 +1,63 @@
+* { box-sizing: border-box; }
+body {
+  margin: 0;
+  font-family: "Segoe UI", Roboto, Arial, sans-serif;
+  background: #fdf8ec;
+  color: #2b2b2b;
+}
+button { font-family: inherit; cursor: pointer; }
+a { color: inherit; text-decoration: none; }
+img { display: block; }
+
+/* ================= CGV HEADER ================= */
+.cgv-topbar {
+  display: flex; justify-content: flex-end; align-items: center; gap: 20px;
+  background: #fdf8ec; padding: 8px 40px; font-size: 13px; color: #333;
+}
+.cgv-topbar .lang { display: flex; gap: 2px; }
+.cgv-topbar .lang span { padding: 2px 8px; background: #d8d8d8; font-weight: 700; }
+.cgv-topbar .lang .on { background: #e4022b; color: #fff; }
+
+.cgv-stripe { height: 14px; background:
+  repeating-linear-gradient(90deg,#e4022b 0 12px,transparent 12px 20px),
+  #fdf8ec; border-top: 2px solid #e4022b; border-bottom: 2px solid #e4022b; }
+
+.cgv-nav {
+  display: flex; align-items: center; gap: 40px;
+  background: #fdf8ec; padding: 14px 40px; position: relative;
+}
+.cgv-nav .logo { color: #e4022b; font-size: 34px; font-weight: 900; letter-spacing: -2px; }
+.cgv-nav .logo span { color: #f5a623; }
+.cgv-nav .menu { display: flex; gap: 30px; font-weight: 700; color: #333; font-size: 15px; }
+.cgv-nav .menu a:hover { color: #e4022b; }
+.cgv-nav .buy {
+  margin-left: auto; background: #e4022b; color: #fff; font-weight: 800;
+  padding: 10px 18px; border-radius: 6px; font-size: 13px; border: 2px solid #b30020;
+}
+
+/* ================= FOOTER ================= */
+.cgv-footer { border-top: 2px solid #e4022b; margin-top: 40px; padding: 24px 40px; font-size: 13px; color: #555; background: #fdf8ec; }
+.cgv-footer .brands { text-align: center; color: #999; font-weight: 700; letter-spacing: 1px; padding-bottom: 16px; }
+
+/* ================= MOVIE SELECTION ================= */
+.section-title {
+  text-align: center; font-size: 34px; font-weight: 900; letter-spacing: 2px;
+  color: #333; margin: 40px 0 28px; font-family: Georgia, serif;
+}
+.movie-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 22px; max-width: 1080px; margin: 0 auto; padding: 0 20px; }
+.movie-card { background: #fff; border-radius: 6px; overflow: hidden; box-shadow: 0 2px 8px rgba(0,0,0,.08); }
+.movie-poster { width: 100%; aspect-ratio: 2/3; object-fit: cover; background: #eee; }
+.movie-card .body { padding: 12px; }
+.movie-card .title { font-weight: 700; font-size: 14px; min-height: 40px; line-height: 1.35; }
+.movie-card .btn-buy {
+  margin-top: 10px; width: 100%; padding: 10px; border: none; border-radius: 4px;
+  background: #e4022b; color: #fff; font-weight: 800; letter-spacing: .5px;
+}
+.movie-card .btn-buy:hover { background: #c40025; }
+
+.hero-banner {
+  max-width: 1080px; margin: 24px auto 0; border-radius: 8px; overflow: hidden;
+  background: linear-gradient(120deg,#7db3e8,#a5d0f0); height: 300px;
+  display: flex; align-items: center; justify-content: center; color: #fff;
+  font-size: 40px; font-weight: 900; text-shadow: 0 2px 8px rgba(0,0,0,.3);
+}

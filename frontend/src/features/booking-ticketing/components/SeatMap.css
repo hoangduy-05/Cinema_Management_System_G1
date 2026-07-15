@@ -1,0 +1,9 @@
+.seatmap-wrap { padding: 20px 0; }
+.screen { position: relative; text-align: center; margin-bottom: 28px; }
+.screen-arc {
+  height: 34px; margin: 0 40px;
+  border-top: 3px solid #b9b9b9; border-radius: 50% / 100% 100% 0 0;
+}
+.screen-label { color: #9a9a9a; letter-spacing: 4px; font-size: 15px; }
+.seat-scroll { overflow-x: auto; }
+.seat-grid { display: grid; gap: 5px; justify-content: center; min-width: max-content; margin: 0 auto; }
