@@ -19,6 +19,7 @@
 -- Table structure for table `account`
 --
 
+DROP DATABASE IF EXISTS cinema_management;
 CREATE DATABASE IF NOT EXISTS cinema_management CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 USE cinema_management;
 
