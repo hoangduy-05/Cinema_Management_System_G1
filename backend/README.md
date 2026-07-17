@@ -55,6 +55,7 @@ No transition is allowed from `COMPLETED`, `CANCELLED`, or `EXPIRED`. All status
 | `GET` | `/api/v1/showtimes/{showtimeId}/seats` | Seat map, calculated prices and availability |
 | `GET` | `/api/v1/movies/{movieId}/showtimes?date=&branchId=` | Showtime groups by branch |
 | `GET` | `/api/v1/branches/{branchId}/showtimes/quick?date=` | Quick schedule grouped by movie |
+| `GET` | `/api/v1/combos` | List active concession combos |
 
 ## Authentication APIs
 
@@ -73,6 +74,7 @@ Use the returned access token as `Authorization: Bearer <token>` for customer bo
 | `PUT` | `/api/v1/bookings/{bookingId}/combos` | `SEAT_HELD` | `SEAT_HELD` |
 | `POST` | `/api/v1/bookings/{bookingId}/voucher` | `SEAT_HELD` | `SEAT_HELD` |
 | `DELETE` | `/api/v1/bookings/{bookingId}/voucher` | `SEAT_HELD` | `SEAT_HELD` |
+| `GET` | `/api/v1/bookings/me?page=0&size=10&status=` | Customer JWT; optional status filter | Unchanged |
 | `GET` | `/api/v1/bookings/{bookingId}/summary` | Owner only | Unchanged |
 | `POST` | `/api/v1/bookings/{bookingId}/checkout` | `SEAT_HELD` | `PENDING_PAYMENT` |
 | `POST` | `/api/v1/bookings/{bookingId}/payments/retry` | `PENDING_PAYMENT` | `PENDING_PAYMENT` |
@@ -85,7 +87,9 @@ Creating a hold returns HTTP `201`. Other successful booking operations return H
 | Method | Endpoint | Authentication | Required booking status | Status after success |
 |---|---|---|---|---|
 | `POST` | `/api/v1/payments` | Customer JWT | `PENDING_PAYMENT` | `PENDING_PAYMENT` |
+| `GET` | `/api/v1/payments/booking/{bookingId}/latest` | Customer JWT; owner only | Any status with a payment attempt | Unchanged |
 | `POST` | `/api/v1/payments/{paymentId}/retry` | Customer JWT | `PENDING_PAYMENT` | `PENDING_PAYMENT` |
+| `POST` | `/api/v1/payments/{paymentId}/browser-confirm` | Customer JWT; owner only | `PENDING_PAYMENT`; browser simulation enabled | `CONFIRMED` |
 | `POST` | `/api/v1/payments/callback` | Simulation token | `PENDING_PAYMENT` | `CONFIRMED` for payment success; unchanged for a failed attempt before deadline |
 
 The development payment gateway is isolated behind the payment service. Configure its callback verification token with `BOOKING_PAYMENT_SIMULATION_TOKEN` and send that operator-known value only in the callback request. It is never returned by a customer payment response. A production gateway must replace this simulation and perform its own cryptographic signature verification.
