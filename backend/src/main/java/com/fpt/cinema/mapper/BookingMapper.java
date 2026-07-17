@@ -2,6 +2,7 @@ package com.fpt.cinema.mapper;
 
 import com.fpt.cinema.dto.response.AppliedVoucherResponse;
 import com.fpt.cinema.dto.response.BookingComboResponse;
+import com.fpt.cinema.dto.response.BookingHistoryItemResponse;
 import com.fpt.cinema.dto.response.BookingResponse;
 import com.fpt.cinema.dto.response.BookingSeatResponse;
 import com.fpt.cinema.dto.response.BookingSummaryResponse;
@@ -9,6 +10,7 @@ import com.fpt.cinema.entity.Booking;
 import com.fpt.cinema.entity.Branch;
 import com.fpt.cinema.entity.Movie;
 import com.fpt.cinema.entity.OrderCombo;
+import com.fpt.cinema.entity.Payment;
 import com.fpt.cinema.entity.Room;
 import com.fpt.cinema.entity.Showtime;
 import com.fpt.cinema.entity.ShowtimeSeat;
@@ -45,6 +47,40 @@ public class BookingMapper {
                 booking.getHoldExpiresAt(),
                 remainingSeconds(now, booking.getHoldExpiresAt()),
                 booking.getPaymentExpiresAt()
+        );
+    }
+
+    public BookingHistoryItemResponse toHistoryItem(Booking booking, List<Ticket> tickets, Payment payment) {
+        Showtime showtime = booking.getShowtime();
+        Movie movie = showtime.getMovie();
+        Room room = showtime.getRoom();
+        Branch branch = room.getBranch();
+        return new BookingHistoryItemResponse(
+                booking.getId(),
+                booking.getBookingCode(),
+                booking.getStatus().name(),
+                booking.getCreatedAt(),
+                booking.getConfirmedAt(),
+                booking.getCompletedAt(),
+                booking.getCancelledAt(),
+                booking.getExpiredAt(),
+                new BookingHistoryItemResponse.MovieInfo(movie.getMovieId(), movie.getTitle(), movie.getPosterUrl(), movie.getAgeRating()),
+                new BookingHistoryItemResponse.BranchInfo(branch.getBranchId(), branch.getBranchName(), branch.getAddress()),
+                new BookingHistoryItemResponse.RoomInfo(room.getRoomId(), room.getRoomName(), room.getRoomType()),
+                new BookingHistoryItemResponse.ShowtimeInfo(showtime.getShowtimeId(), showtime.getStartTime(), showtime.getEndTime()),
+                tickets.stream().map(ticket -> ticket.getShowtimeSeat().getSeat().getSeatRow() + ticket.getShowtimeSeat().getSeat().getSeatNumber()).toList(),
+                booking.getSeatSubtotal(),
+                booking.getComboSubtotal(),
+                booking.getDiscountAmount(),
+                booking.getTotalAmount(),
+                payment == null ? null : new BookingHistoryItemResponse.PaymentInfo(
+                        payment.getStatus().name(), payment.getMethod(), payment.getPaymentTime(), payment.getTransactionCode()
+                ),
+                tickets.stream().map(ticket -> new BookingHistoryItemResponse.TicketInfo(
+                        ticket.getId(), ticket.getTicketCode(), ticket.getTicketStatus().name(),
+                        ticket.getShowtimeSeat().getSeat().getSeatRow() + ticket.getShowtimeSeat().getSeat().getSeatNumber(),
+                        ticket.getPrice(), ticket.getCheckedInAt()
+                )).toList()
         );
     }
 

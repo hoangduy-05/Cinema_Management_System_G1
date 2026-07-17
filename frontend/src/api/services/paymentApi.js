@@ -1,4 +1,6 @@
 import axiosClient from "@/api/client/axiosClient";
 
-// TODO: bổ sung endpoint cho module paymentApi
-export const paymentApi = {};
+export const paymentApi = {
+  getLatest: (bookingId) => axiosClient.get(`/payments/booking/${bookingId}/latest`),
+  confirmBrowser: (paymentId) => axiosClient.post(`/payments/${paymentId}/browser-confirm`),
+};

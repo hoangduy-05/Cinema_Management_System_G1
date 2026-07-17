@@ -6,9 +6,12 @@ import com.fpt.cinema.dto.request.CheckoutRequest;
 import com.fpt.cinema.dto.request.HoldSeatsRequest;
 import com.fpt.cinema.dto.request.PaymentRetryRequest;
 import com.fpt.cinema.dto.request.UpdateBookingCombosRequest;
+import com.fpt.cinema.dto.response.BookingHistoryItemResponse;
 import com.fpt.cinema.dto.response.BookingResponse;
 import com.fpt.cinema.dto.response.BookingSummaryResponse;
+import com.fpt.cinema.dto.response.PageResponse;
 import com.fpt.cinema.dto.response.PaymentResponse;
+import com.fpt.cinema.enums.BookingStatus;
 import com.fpt.cinema.service.BookingPricingService;
 import com.fpt.cinema.service.BookingService;
 import com.fpt.cinema.service.PaymentService;
@@ -29,6 +32,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -137,6 +141,19 @@ public class BookingController {
         return ApiResponse.success(
                 "Voucher removed successfully",
                 bookingPricingService.removeVoucher(bookingId, authentication.getName())
+        );
+    }
+
+    @GetMapping("/me")
+    @Operation(summary = "Get the authenticated customer's booking history")
+    public ApiResponse<PageResponse<BookingHistoryItemResponse>> getMyBookingHistory(
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size,
+            @RequestParam(required = false) BookingStatus status,
+            Authentication authentication
+    ) {
+        return ApiResponse.success(
+                bookingService.getMyBookingHistory(authentication.getName(), status, page, size)
         );
     }
 

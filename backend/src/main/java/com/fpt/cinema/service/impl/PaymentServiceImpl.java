@@ -65,6 +65,7 @@ public class PaymentServiceImpl implements PaymentService {
     private final Clock clock;
     private final long paymentTimeoutMinutes;
     private final String simulationToken;
+    private final boolean browserConfirmEnabled;
 
     public PaymentServiceImpl(
             PaymentRepository paymentRepository,
@@ -79,7 +80,8 @@ public class PaymentServiceImpl implements PaymentService {
             ApplicationEventPublisher eventPublisher,
             Clock clock,
             @Value("${booking.payment-timeout-minutes:10}") long paymentTimeoutMinutes,
-            @Value("${booking.payment.simulation-token}") String simulationToken
+            @Value("${booking.payment.simulation-token}") String simulationToken,
+            @Value("${booking.payment.browser-confirm-enabled:false}") boolean browserConfirmEnabled
     ) {
         if (paymentTimeoutMinutes <= 0) {
             throw new IllegalArgumentException("booking.payment-timeout-minutes must be positive");
@@ -97,6 +99,7 @@ public class PaymentServiceImpl implements PaymentService {
         this.clock = clock;
         this.paymentTimeoutMinutes = paymentTimeoutMinutes;
         this.simulationToken = simulationToken == null ? "" : simulationToken;
+        this.browserConfirmEnabled = browserConfirmEnabled;
     }
 
     @Override
@@ -122,6 +125,21 @@ public class PaymentServiceImpl implements PaymentService {
     }
 
     @Override
+    @Transactional(readOnly = true)
+    public PaymentResponse getLatestPayment(Long bookingId, String username) {
+        Customer customer = requireCustomer(username);
+        Booking booking = bookingRepository.findById(bookingId)
+                .orElseThrow(() -> new BookingNotFoundException(bookingId));
+        verifyOwnership(booking, customer.getCustomerId());
+        Payment payment = paymentRepository.findFirstByOrderIdOrderByIdDesc(booking.getOrder().getId())
+                .orElseThrow(() -> new PaymentVerificationException("Payment attempt was not found."));
+        boolean retryAllowed = booking.getStatus() == BookingStatus.PENDING_PAYMENT
+                && !paymentDeadlineExpired(booking, LocalDateTime.now(clock))
+                && payment.getStatus() != PaymentStatus.SUCCESS;
+        return toPaymentResponse(booking, payment, retryAllowed);
+    }
+
+    @Override
     @Transactional
     public PaymentResponse retryPayment(Long bookingId, String username, String paymentMethod) {
         Customer customer = requireCustomer(username);
@@ -140,6 +158,41 @@ public class PaymentServiceImpl implements PaymentService {
         Booking booking = bookingRepository.findByOrderIdForUpdate(payment.getOrder().getId())
                 .orElseThrow(() -> new PaymentVerificationException("Payment is not linked to a booking."));
         return retryLocked(booking, customer.getCustomerId(), paymentMethod, LocalDateTime.now(clock));
+    }
+
+    @Override
+    @Transactional
+    public PaymentCallbackResponse confirmBrowserPayment(Long paymentId, String username) {
+        if (!browserConfirmEnabled) {
+            throw new PaymentVerificationException("Browser payment confirmation is disabled.");
+        }
+        Customer customer = requireCustomer(username);
+        Payment candidate = paymentRepository.findById(paymentId)
+                .orElseThrow(() -> new PaymentVerificationException("Payment attempt was not found."));
+        Payment payment = lockAllAttemptsAndFindById(candidate.getOrder().getId(), paymentId);
+        Booking booking = bookingRepository.findByOrderIdForUpdate(payment.getOrder().getId())
+                .orElseThrow(() -> new PaymentVerificationException("Payment is not linked to a booking."));
+        verifyOwnership(booking, customer.getCustomerId());
+
+        if (payment.getStatus() == PaymentStatus.SUCCESS) {
+            if (booking.getStatus() != BookingStatus.CONFIRMED
+                    && booking.getStatus() != BookingStatus.COMPLETED) {
+                throw new PaymentVerificationException("Successful payment has an inconsistent booking status.");
+            }
+            return callbackResponse(payment, booking, true, false, "Payment was already processed successfully.");
+        }
+
+        LocalDateTime now = LocalDateTime.now(clock);
+        if (booking.getStatus() != BookingStatus.PENDING_PAYMENT) {
+            throw new PaymentVerificationException("The booking is not awaiting payment.");
+        }
+        if (paymentDeadlineExpired(booking, now) || paymentAttemptExpired(payment, now)) {
+            expireBookingAfterPaymentDeadline(booking, now);
+            return callbackResponse(payment, booking, false, false, "The payment deadline has expired.");
+        }
+        verifyAmount(payment, booking, payment.getAmount());
+        processPaymentSuccess(payment, booking, now);
+        return callbackResponse(payment, booking, true, false, "Payment completed successfully.");
     }
 
     @Override

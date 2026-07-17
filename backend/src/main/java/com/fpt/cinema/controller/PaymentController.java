@@ -15,6 +15,7 @@ import jakarta.validation.Valid;
 import jakarta.validation.constraints.Positive;
 import org.springframework.security.core.Authentication;
 import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -58,6 +59,25 @@ public class PaymentController {
         );
     }
 
+    @GetMapping("/booking/{bookingId}/latest")
+    @SecurityRequirement(name = "bearerAuth")
+    @Operation(summary = "Get the latest payment attempt for an owned booking")
+    @ApiResponses({
+            @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "200", description = "Latest payment attempt returned"),
+            @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "400", description = "Payment attempt was not found"),
+            @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "401", description = "Authentication required"),
+            @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "403", description = "Booking belongs to another customer"),
+            @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "404", description = "Booking not found")
+    })
+    public ApiResponse<PaymentResponse> getLatestPayment(
+            @PathVariable @Positive Long bookingId,
+            Authentication authentication
+    ) {
+        return ApiResponse.success(
+                paymentService.getLatestPayment(bookingId, authentication.getName())
+        );
+    }
+
     @PostMapping("/{paymentId}/retry")
     @SecurityRequirement(name = "bearerAuth")
     @Operation(summary = "Retry a failed payment attempt before the booking deadline")
@@ -77,6 +97,25 @@ public class PaymentController {
         return ApiResponse.success(
                 "Payment retry created successfully",
                 paymentService.retryPaymentAttempt(paymentId, authentication.getName(), method)
+        );
+    }
+
+    @PostMapping("/{paymentId}/browser-confirm")
+    @SecurityRequirement(name = "bearerAuth")
+    @Operation(summary = "Confirm an owned payment in browser simulation mode")
+    @ApiResponses({
+            @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "200", description = "Payment persisted successfully"),
+            @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "400", description = "Browser confirmation disabled or invalid payment"),
+            @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "401", description = "Authentication required"),
+            @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "403", description = "Booking belongs to another customer"),
+            @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "409", description = "Payment deadline passed or state conflict")
+    })
+    public ApiResponse<PaymentCallbackResponse> confirmBrowserPayment(
+            @PathVariable @Positive Long paymentId,
+            Authentication authentication
+    ) {
+        return ApiResponse.success(
+                paymentService.confirmBrowserPayment(paymentId, authentication.getName())
         );
     }
 

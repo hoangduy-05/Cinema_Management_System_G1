@@ -22,6 +22,7 @@ import com.fpt.cinema.mapper.BookingMapper;
 import com.fpt.cinema.repository.BookingRepository;
 import com.fpt.cinema.repository.CustomerRepository;
 import com.fpt.cinema.repository.OrderComboRepository;
+import com.fpt.cinema.repository.PaymentRepository;
 import com.fpt.cinema.repository.ShowtimeSeatRepository;
 import com.fpt.cinema.repository.TicketRepository;
 import com.fpt.cinema.service.BookingPricingService;
@@ -73,6 +74,8 @@ class BookingServiceImplTest {
     @Mock
     private OrderComboRepository orderComboRepository;
     @Mock
+    private PaymentRepository paymentRepository;
+    @Mock
     private BookingPricingService bookingPricingService;
     @Mock
     private SeatReservationService seatReservationService;
@@ -96,6 +99,7 @@ class BookingServiceImplTest {
                 showtimeSeatRepository,
                 ticketRepository,
                 orderComboRepository,
+                paymentRepository,
                 stateMachine,
                 bookingPricingService,
                 seatReservationService,

@@ -20,6 +20,8 @@ public interface PaymentRepository extends JpaRepository<Payment, Long> {
 
     List<Payment> findAllByOrderIdOrderByIdDesc(Long orderId);
 
+    Optional<Payment> findFirstByOrderIdOrderByIdDesc(Long orderId);
+
     Optional<Payment> findFirstByOrderIdAndStatusAndExpiresAtAfterOrderByIdDesc(
             Long orderId,
             PaymentStatus status,

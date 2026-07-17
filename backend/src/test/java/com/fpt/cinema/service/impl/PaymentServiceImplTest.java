@@ -103,7 +103,8 @@ class PaymentServiceImplTest {
                 eventPublisher,
                 CLOCK,
                 10,
-                TOKEN
+                TOKEN,
+                true
         );
     }
 
@@ -221,6 +222,29 @@ class PaymentServiceImplTest {
         verify(voucherUsageRepository, times(1)).save(usageCaptor.capture());
         assertEquals(3, voucher.getUsedCount());
         assertEquals(booking.getDiscountAmount(), usageCaptor.getValue().getDiscountAmount());
+    }
+
+    @Test
+    void browserConfirmationPersistsSuccessfulOwnedPayment() {
+        Booking booking = pendingBooking();
+        Payment payment = pendingPayment(booking);
+        ShowtimeSeat seat = heldSeat(booking);
+        Customer customer = booking.getOrder().getCustomer();
+        when(customerRepository.findByAccountUsernameIgnoreCase("customer")).thenReturn(Optional.of(customer));
+        when(paymentRepository.findById(payment.getId())).thenReturn(Optional.of(payment));
+        when(paymentRepository.findAllByOrderIdForUpdate(payment.getOrder().getId())).thenReturn(List.of(payment));
+        when(bookingRepository.findByOrderIdForUpdate(booking.getOrder().getId())).thenReturn(Optional.of(booking));
+        when(showtimeSeatRepository.findAllByBookingIdForUpdate(booking.getId())).thenReturn(List.of(seat));
+
+        PaymentCallbackResponse response = service.confirmBrowserPayment(payment.getId(), "customer");
+
+        assertTrue(response.successful());
+        assertEquals(PaymentStatus.SUCCESS, payment.getStatus());
+        assertEquals(BookingStatus.CONFIRMED, booking.getStatus());
+        assertEquals("PAID", booking.getOrder().getPaymentStatus());
+        assertEquals(ShowtimeSeatStatus.BOOKED, seat.getSeatStatus());
+        verify(ticketService).issueOrActivateTickets(booking, List.of(seat));
+        verify(eventPublisher).publishEvent(any(BookingConfirmedEvent.class));
     }
 
     @Test

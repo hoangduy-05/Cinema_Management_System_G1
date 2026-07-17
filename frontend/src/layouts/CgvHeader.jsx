@@ -1,6 +1,7 @@
 import { Link, useNavigate } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { logout } from "@/store/slices/authSlice";
+import { PATHS } from "@/routes/routePaths";
 
 export default function CgvHeader() {
   const { user } = useSelector((s) => s.auth);
@@ -11,7 +12,7 @@ export default function CgvHeader() {
     <>
       <div className="cgv-topbar">
         <span>🎟 TIN MỚI &amp; ƯU ĐÃI</span>
-        <span>🎫 VÉ CỦA TÔI</span>
+        <Link to={PATHS.MY_TICKETS}>🎫 VÉ CỦA TÔI</Link>
         {user ? (
           <span>
             👤 XIN CHÀO, <b>{user.username}</b>!{" "}

@@ -1,13 +1,16 @@
 package com.fpt.cinema.service.impl;
 
 import com.fpt.cinema.dto.request.CheckoutRequest;
+import com.fpt.cinema.dto.response.BookingHistoryItemResponse;
 import com.fpt.cinema.dto.response.BookingResponse;
 import com.fpt.cinema.dto.response.BookingSummaryResponse;
+import com.fpt.cinema.dto.response.PageResponse;
 import com.fpt.cinema.dto.response.PaymentResponse;
 import com.fpt.cinema.entity.Booking;
 import com.fpt.cinema.entity.BookingStateMachine;
 import com.fpt.cinema.entity.Customer;
 import com.fpt.cinema.entity.OrderCombo;
+import com.fpt.cinema.entity.Payment;
 import com.fpt.cinema.entity.ShowtimeSeat;
 import com.fpt.cinema.entity.Ticket;
 import com.fpt.cinema.enums.BookingStatus;
@@ -21,6 +24,7 @@ import com.fpt.cinema.mapper.BookingMapper;
 import com.fpt.cinema.repository.BookingRepository;
 import com.fpt.cinema.repository.CustomerRepository;
 import com.fpt.cinema.repository.OrderComboRepository;
+import com.fpt.cinema.repository.PaymentRepository;
 import com.fpt.cinema.repository.ShowtimeSeatRepository;
 import com.fpt.cinema.repository.TicketRepository;
 import com.fpt.cinema.service.BookingPricingService;
@@ -28,6 +32,8 @@ import com.fpt.cinema.service.BookingService;
 import com.fpt.cinema.service.PaymentService;
 import com.fpt.cinema.service.SeatReservationService;
 import com.fpt.cinema.service.TicketService;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -52,6 +58,7 @@ public class BookingServiceImpl implements BookingService {
     private final ShowtimeSeatRepository showtimeSeatRepository;
     private final TicketRepository ticketRepository;
     private final OrderComboRepository orderComboRepository;
+    private final PaymentRepository paymentRepository;
     private final BookingStateMachine bookingStateMachine;
     private final BookingPricingService bookingPricingService;
     private final SeatReservationService seatReservationService;
@@ -66,6 +73,7 @@ public class BookingServiceImpl implements BookingService {
             ShowtimeSeatRepository showtimeSeatRepository,
             TicketRepository ticketRepository,
             OrderComboRepository orderComboRepository,
+            PaymentRepository paymentRepository,
             BookingStateMachine bookingStateMachine,
             BookingPricingService bookingPricingService,
             SeatReservationService seatReservationService,
@@ -79,6 +87,7 @@ public class BookingServiceImpl implements BookingService {
         this.showtimeSeatRepository = showtimeSeatRepository;
         this.ticketRepository = ticketRepository;
         this.orderComboRepository = orderComboRepository;
+        this.paymentRepository = paymentRepository;
         this.bookingStateMachine = bookingStateMachine;
         this.bookingPricingService = bookingPricingService;
         this.seatReservationService = seatReservationService;
@@ -105,6 +114,39 @@ public class BookingServiceImpl implements BookingService {
                 tickets,
                 orderCombos,
                 allowedActions(booking, now)
+        );
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public PageResponse<BookingHistoryItemResponse> getMyBookingHistory(
+            String username,
+            BookingStatus status,
+            int page,
+            int size
+    ) {
+        Customer customer = requireCustomer(username);
+        int safePage = Math.max(0, page);
+        int safeSize = Math.min(50, Math.max(1, size));
+        PageRequest pageRequest = PageRequest.of(safePage, safeSize);
+        Page<Booking> bookings = status == null
+                ? bookingRepository.findAllByOrderCustomerCustomerIdOrderByCreatedAtDescIdDesc(
+                        customer.getCustomerId(), pageRequest
+                )
+                : bookingRepository.findAllByOrderCustomerCustomerIdAndStatusOrderByCreatedAtDescIdDesc(
+                        customer.getCustomerId(), status, pageRequest
+                );
+        List<BookingHistoryItemResponse> content = bookings.getContent().stream()
+                .map(this::toHistoryItem)
+                .toList();
+        return new PageResponse<>(
+                content,
+                bookings.getNumber(),
+                bookings.getSize(),
+                bookings.getTotalElements(),
+                bookings.getTotalPages(),
+                bookings.isFirst(),
+                bookings.isLast()
         );
     }
 
@@ -194,6 +236,12 @@ public class BookingServiceImpl implements BookingService {
         bookingStateMachine.transition(booking, BookingStatus.CANCELLED);
 
         return currentBookingResponse(booking, now);
+    }
+
+    private BookingHistoryItemResponse toHistoryItem(Booking booking) {
+        List<Ticket> tickets = ticketRepository.findAllByBookingIdOrderByIdAsc(booking.getId());
+        Payment payment = paymentRepository.findFirstByOrderIdOrderByIdDesc(booking.getOrder().getId()).orElse(null);
+        return bookingMapper.toHistoryItem(booking, tickets, payment);
     }
 
     private Customer requireCustomer(String username) {
