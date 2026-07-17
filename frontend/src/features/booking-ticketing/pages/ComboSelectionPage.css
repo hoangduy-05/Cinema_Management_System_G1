@@ -1,0 +1,373 @@
+.combo-page {
+  min-height: 100vh;
+  padding: 24px 12px;
+  background: #f4efe0;
+  color: #222;
+  font-family: Verdana, Arial, sans-serif;
+  font-size: 14px;
+  line-height: 18px;
+}
+
+.combo-booking {
+  width: 100%;
+  max-width: 1080px;
+  margin: 0 auto;
+  border: 1px solid #d8d1bd;
+  background: #fffdf1;
+  box-sizing: border-box;
+}
+
+.combo-booking-title {
+  margin: 0;
+  padding: 10px;
+  background: #1d191a;
+  color: #fff;
+  font-size: 18px;
+  line-height: 22px;
+  text-align: center;
+}
+
+.combo-booking-meta {
+  display: flex;
+  min-height: 104px;
+  padding: 12px 14px;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 24px;
+  background: #fff1c9;
+  border-bottom: 1px solid #d7c79b;
+  box-sizing: border-box;
+}
+
+.combo-booking-meta > div:first-child {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.combo-countdown {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+}
+
+.combo-countdown-label {
+  font-size: 16px;
+}
+
+.combo-countdown-boxes {
+  display: flex;
+  gap: 8px;
+}
+
+.combo-countdown-boxes div {
+  display: flex;
+  min-width: 58px;
+  padding: 7px;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  border-radius: 4px;
+  background: #fff;
+  color: #999;
+  box-sizing: border-box;
+}
+
+.combo-countdown-boxes b {
+  min-width: 38px;
+  padding: 7px 4px;
+  border-radius: 3px;
+  background: #e51b14;
+  color: #fff;
+  text-align: center;
+}
+
+.combo-countdown-boxes span {
+  font-size: 11px;
+}
+
+.combo-section-title {
+  margin: 22px 0 0;
+  padding: 7px;
+  background: #bcbec0;
+  font-size: 16px;
+  line-height: 20px;
+  text-align: center;
+}
+
+.combo-products-list {
+  display: grid;
+  width: 100%;
+  margin: 0;
+  padding: 10px 24px 24px;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  column-gap: 34px;
+  row-gap: 8px;
+  list-style: none;
+  box-sizing: border-box;
+}
+
+.combo-product {
+  display: grid;
+  min-width: 0;
+  min-height: 188px;
+  padding: 10px 0;
+  grid-template-columns: 172px minmax(0, 1fr);
+  gap: 14px;
+  box-sizing: border-box;
+}
+
+.combo-image-wrap {
+  display: flex;
+  width: 172px;
+  height: 172px;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+
+.combo-product-image {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+.combo-image-placeholder {
+  display: flex;
+  width: 142px;
+  height: 142px;
+  align-items: center;
+  justify-content: center;
+  border: 2px dashed #d2c7a9;
+  color: #c62828;
+  font-weight: 700;
+  text-align: center;
+}
+
+.combo-product-shop {
+  display: flex;
+  min-width: 0;
+  padding: 4px 0;
+  flex-direction: column;
+}
+
+.combo-product-shop h3 {
+  margin: 0 0 8px;
+  font-size: 14px;
+  line-height: 18px;
+  text-transform: uppercase;
+}
+
+.combo-product-shop p {
+  margin: 0;
+  flex: 1;
+  white-space: pre-line;
+  overflow-wrap: anywhere;
+}
+
+.combo-product-bottom {
+  margin-top: 8px;
+}
+
+.combo-price {
+  display: flex;
+  margin-bottom: 8px;
+  gap: 5px;
+  font-weight: 700;
+}
+
+.combo-quantity {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.combo-quantity button {
+  width: 25px;
+  height: 28px;
+  padding: 0;
+  border: 0;
+  background: #e31813;
+  color: #fff;
+  font-size: 18px;
+  cursor: pointer;
+}
+
+.combo-quantity button:disabled {
+  opacity: .45;
+  cursor: not-allowed;
+}
+
+.combo-quantity output {
+  display: inline-flex;
+  width: 34px;
+  height: 28px;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid #ccc;
+  background: #fff;
+  box-sizing: border-box;
+}
+
+.combo-message {
+  margin: 0;
+  padding: 56px 20px;
+  color: #666;
+  text-align: center;
+}
+
+.combo-error,
+.combo-inline-error {
+  color: #c62828;
+}
+
+.combo-inline-error {
+  margin: 0;
+  padding: 10px 18px;
+  background: #fff2f2;
+  text-align: center;
+}
+
+.combo-film-strip {
+  display: flex;
+  align-items: stretch;
+  border-top: 6px dotted #333;
+  border-bottom: 6px dotted #333;
+  background: #111;
+  color: #eee;
+}
+
+.combo-nav-btn {
+  display: flex;
+  width: 120px;
+  padding: 8px;
+  flex-shrink: 0;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  border: 0;
+  background: #2a2a2a;
+  color: #fff;
+  font-size: 13px;
+  letter-spacing: 1px;
+  cursor: pointer;
+}
+
+.combo-nav-btn span {
+  font-size: 24px;
+}
+
+.combo-nav-btn.combo-next {
+  background: #c62828;
+}
+
+.combo-nav-btn:disabled {
+  opacity: .6;
+  cursor: not-allowed;
+}
+
+.combo-film-info {
+  display: flex;
+  min-width: 0;
+  padding: 14px 20px;
+  flex: 1;
+  gap: 22px;
+  font-size: 13px;
+}
+
+.combo-film-poster {
+  width: 54px;
+  height: 78px;
+  flex-shrink: 0;
+  border-radius: 3px;
+  object-fit: cover;
+}
+
+.combo-film-col {
+  display: flex;
+  min-width: 145px;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.combo-film-col strong {
+  color: #fff;
+}
+
+.combo-film-name {
+  max-width: 170px;
+}
+
+.combo-muted,
+.combo-totals span {
+  color: #9a9a9a;
+}
+
+.combo-totals {
+  margin-left: auto;
+}
+
+.combo-totals div {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+@media (max-width: 840px) {
+  .combo-products-list {
+    grid-template-columns: 1fr;
+  }
+
+  .combo-film-info {
+    flex-wrap: wrap;
+  }
+
+  .combo-totals {
+    margin-left: 0;
+  }
+}
+
+@media (max-width: 600px) {
+  .combo-page {
+    padding: 0;
+  }
+
+  .combo-booking-meta {
+    flex-direction: column;
+  }
+
+  .combo-countdown {
+    align-self: center;
+  }
+
+  .combo-products-list {
+    padding: 8px 14px 20px;
+  }
+
+  .combo-product {
+    min-height: 142px;
+    grid-template-columns: 124px minmax(0, 1fr);
+    gap: 10px;
+  }
+
+  .combo-image-wrap {
+    width: 124px;
+    height: 124px;
+  }
+
+  .combo-film-strip {
+    flex-wrap: wrap;
+  }
+
+  .combo-film-info {
+    width: 100%;
+    order: -1;
+  }
+
+  .combo-nav-btn {
+    width: 50%;
+    min-height: 70px;
+  }
+}

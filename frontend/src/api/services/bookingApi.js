@@ -7,6 +7,8 @@ export const bookingApi = {
     axiosClient.post("/bookings/holds", { showtimeId, showtimeSeatIds }),
 
   getSummary: (bookingId) => axiosClient.get(`/bookings/${bookingId}/summary`),
+  updateCombos: (bookingId, items) =>
+    axiosClient.put(`/bookings/${bookingId}/combos`, { items }),
   cancel: (bookingId) => axiosClient.post(`/bookings/${bookingId}/cancel`),
   checkout: (bookingId, paymentMethod) =>
     axiosClient.post(`/bookings/${bookingId}/checkout`, { paymentMethod }),

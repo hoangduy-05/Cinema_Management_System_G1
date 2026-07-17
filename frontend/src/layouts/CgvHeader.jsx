@@ -25,14 +25,12 @@ export default function CgvHeader() {
 
       <div className="cgv-stripe" />
       <div className="cgv-nav">
-        <Link to="/" className="logo">CGV<span>*</span></Link>
+        <Link to="/" className="logo">F-Cinema</Link>
         <div className="menu">
           <Link to="/">PHIM</Link>
-          <a>RẠP CGV</a>
-          <a>THÀNH VIÊN</a>
-          <a>CULTUREPLEX</a>
+          <a>RẠP F-Cinema</a>
         </div>
-        <Link to="/" className="buy">🎬 MUA VÉ NGAY</Link>
+        <Link to="/" className="buy">MUA VÉ NGAY</Link>
       </div>
       <div className="cgv-stripe" />
     </>

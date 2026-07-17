@@ -87,7 +87,8 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.GET,
                                 "/api/v1/movies", "/api/v1/movies/**",
                                 "/api/v1/branches", "/api/v1/branches/**",
-                                "/api/v1/showtimes", "/api/v1/showtimes/**"
+                                "/api/v1/showtimes", "/api/v1/showtimes/**",
+                                "/api/v1/combos", "/api/v1/combos/**"
                         ).permitAll()
                         .anyRequest().authenticated())
                 .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);

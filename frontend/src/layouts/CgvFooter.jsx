@@ -13,7 +13,7 @@ export default function CgvFooter() {
         </div>
         <div>
           <b>Chăm sóc khách hàng</b>
-          <p>Hotline: 1900 6017<br />Giờ làm việc: 8:00 - 22:00<br />Email: hoidap@cgv.vn</p>
+          <p>Hotline: 1900 6017<br />Giờ làm việc: 8:00 - 22:00<br />Email: hoidap@fcinema.vn</p>
         </div>
       </div>
     </footer>
