@@ -11,8 +11,11 @@ img { display: block; }
 
 /* ================= CGV HEADER ================= */
 .cgv-topbar {
+  background: #fdf8ec; padding: 8px 20px; font-size: 13px; color: #333;
+}
+.cgv-topbar-content {
+  width: 100%; max-width: 1080px; margin: 0 auto;
   display: flex; justify-content: flex-end; align-items: center; gap: 20px;
-  background: #fdf8ec; padding: 8px 40px; font-size: 13px; color: #333;
 }
 .cgv-topbar .lang { display: flex; gap: 2px; }
 .cgv-topbar .lang span { padding: 2px 8px; background: #d8d8d8; font-weight: 700; }
@@ -23,8 +26,17 @@ img { display: block; }
   #fdf8ec; border-top: 2px solid #e4022b; border-bottom: 2px solid #e4022b; }
 
 .cgv-nav {
-  display: flex; align-items: center; gap: 40px;
-  background: #fdf8ec; padding: 14px 40px; position: relative;
+  background: #fdf8ec;
+  padding: 14px 20px;
+  position: relative;
+}
+.cgv-nav-content {
+  width: 100%;
+  max-width: 1080px;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  gap: 40px;
 }
 .cgv-nav .logo { color: #e4022b; font-size: 34px; font-weight: 900; letter-spacing: -2px; }
 .cgv-nav .logo span { color: #f5a623; }
